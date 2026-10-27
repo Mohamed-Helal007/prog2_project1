@@ -1,0 +1,88 @@
+﻿<mxfile host="65bd71144e">
+    <diagram id="p3-facilities" name="Person 3 Facilities">
+        <mxGraphModel dx="594" dy="584" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1250" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="location" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;align=left;spacing=10;" value="&lt;&lt;interface&gt;&gt;&lt;br&gt;&lt;b&gt;Location&lt;/b&gt;&lt;hr&gt;+ getName() : String" vertex="1">
+                    <mxGeometry height="100" width="260" x="650" y="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="surface" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=14;align=left;spacing=10;" value="&lt;b&gt;SurfaceLocation&lt;/b&gt;&lt;hr&gt;&lt;font color=&quot;#000000&quot;&gt;+&lt;/font&gt;&lt;u&gt;MARS:Surface Location&lt;/u&gt;&lt;br&gt;+ getName() : String" vertex="1">
+                    <mxGeometry height="100" width="280" x="1010" y="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="rtype" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;align=left;spacing=10;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;&lt;b&gt;ResourceType&lt;/b&gt;&lt;hr&gt;OXYGEN&lt;br&gt;WATER&lt;br&gt;FOOD&lt;br&gt;FUEL&lt;br&gt;BATTERY_POWER&lt;br&gt;MEDICAL_SUPPLIES&lt;br&gt;SPARE_PARTS" vertex="1">
+                    <mxGeometry height="240" width="270" x="70" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="fstatus" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;align=left;spacing=10;" value="&lt;&lt;enumeration&gt;&gt;&lt;br&gt;&lt;b&gt;FacilityStatus&lt;/b&gt;&lt;hr&gt;OPERATIONAL&lt;br&gt;UNAVAILABLE&lt;br&gt;DESTROYED" vertex="1">
+                    <mxGeometry height="140" width="270" x="70" y="570" as="geometry"/>
+                </mxCell>
+                <mxCell id="equipment" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;Equipment&lt;/b&gt;&lt;hr&gt;- name : String&lt;br&gt;- working : boolean&lt;hr&gt;+ Equipment(name)&lt;br&gt;+ getName() : String&lt;br&gt;+ damage() : void&lt;br&gt;+ repair() : void&lt;br&gt;+ isWorking() : boolean" vertex="1">
+                    <mxGeometry height="210" width="310" x="320" y="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="lifesupport" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;LifeSupportSystem&lt;/b&gt;&lt;hr&gt;- working : boolean&lt;hr&gt;+ isWorking() : boolean&lt;br&gt;+ fail() : void&lt;br&gt;+ restore() : void" vertex="1">
+                    <mxGeometry height="150" width="330" x="1390" y="470" as="geometry"/>
+                </mxCell>
+                <mxCell id="facility" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" value="&amp;lt;&amp;gt;&lt;br&gt;&lt;b&gt;Facility&lt;/b&gt;&lt;hr&gt;- name : String&lt;br&gt;- location : Location&lt;br&gt;- capacity : int&lt;br&gt;- status : FacilityStatus&lt;br&gt;- stock : Map&lt;br&gt;- equipment : List&lt;hr&gt;+ getName() : String&lt;br&gt;+ getLocation() : Location&lt;br&gt;+ getCapacity() : int&lt;br&gt;+ getStatus() : FacilityStatus&lt;br&gt;+ getResourceQuantity(type) : int&lt;br&gt;+ addRescource(type, qty) : void&lt;br&gt;+ useResources(type, qty) : boolean&lt;br&gt;+ isOperational() : boolean&lt;br&gt;+ setStatus(status) : void&lt;br&gt;+ addEquipment(item) : void&lt;br&gt;+ getEquipment() : List" vertex="1">
+                    <mxGeometry height="390" width="500" x="720" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="resourcepool" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;ResourcePool&lt;/b&gt;&lt;hr&gt;- facilities : List&lt;Facility&gt;&lt;hr&gt;+ getTotal(type) : int&lt;br&gt;+ canSupply(requirements) : boolean&lt;br&gt;+ consume(requirements) : boolean" vertex="1">
+                    <mxGeometry height="170" width="340" x="70" y="820" as="geometry"/>
+                </mxCell>
+                <mxCell id="habitat" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;Habitat&lt;/b&gt;&lt;hr&gt;+ getOxygen() : int&lt;br&gt;+ loseOxygen(amount) : void" vertex="1">
+                    <mxGeometry height="110" width="260" x="490" y="790" as="geometry"/>
+                </mxCell>
+                <mxCell id="lab" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;Laboratory&lt;/b&gt;&lt;hr&gt;- onFire : boolean&lt;hr&gt;+ ignite() : void&lt;br&gt;+ extinguish() : void&lt;br&gt;+ damageAllEquipment() : void" vertex="1">
+                    <mxGeometry height="150" width="300" x="790" y="790" as="geometry"/>
+                </mxCell>
+                <mxCell id="storage" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;StorageFacility&lt;/b&gt;&lt;hr&gt;Uses Facility stock behavior" vertex="1">
+                    <mxGeometry height="110" width="260" x="1130" y="790" as="geometry"/>
+                </mxCell>
+                <mxCell id="power" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;PowerStation&lt;/b&gt;&lt;hr&gt;Stores battery power as a resource" vertex="1">
+                    <mxGeometry height="110" width="260" x="490" y="1010" as="geometry"/>
+                </mxCell>
+                <mxCell id="comm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" value="&lt;b&gt;CommunicationStation&lt;/b&gt;&lt;hr&gt;+ isCommunicationAvailable() : boolean" vertex="1">
+                    <mxGeometry height="110" width="310" x="840" y="1010" as="geometry"/>
+                </mxCell>
+                <mxCell id="implementsSurface" edge="1" parent="1" source="surface" style="endArrow=block;endFill=0;dashed=1;html=1;" target="location" value="implements">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="implementsFacility" edge="1" parent="1" source="facility" style="endArrow=block;endFill=0;dashed=1;html=1;" target="location" value="implements">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="facStatus" edge="1" parent="1" source="facility" style="endArrow=open;html=1;" target="fstatus" value="status">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="facResource" edge="1" parent="1" source="facility" style="endArrow=open;html=1;" target="rtype" value="stock uses">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="facLocation" edge="1" parent="1" source="facility" style="endArrow=open;html=1;" target="surface" value="located at">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ownsEquipment" edge="1" parent="1" source="facility" style="startArrow=diamond;startFill=0;endArrow=none;html=1;" target="equipment" value="contains 0..*">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ownsLifeSupport" edge="1" parent="1" source="habitat" style="startArrow=diamond;startFill=1;endArrow=none;html=1;" target="lifesupport" value="owns 1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tracksFacilities" edge="1" parent="1" source="resourcepool" style="startArrow=diamond;startFill=0;endArrow=none;html=1;" target="facility" value="tracks 0..*">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inhHabitat" edge="1" parent="1" source="habitat" style="endArrow=block;endFill=0;html=1;" target="facility" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inhLab" edge="1" parent="1" source="lab" style="endArrow=block;endFill=0;html=1;" target="facility" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inhStorage" edge="1" parent="1" source="storage" style="endArrow=block;endFill=0;html=1;" target="facility" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inhPower" edge="1" parent="1" source="power" style="endArrow=block;endFill=0;html=1;" target="facility" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inhComm" edge="1" parent="1" source="comm" style="endArrow=block;endFill=0;html=1;" target="facility" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
