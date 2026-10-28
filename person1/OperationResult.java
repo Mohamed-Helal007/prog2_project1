@@ -1,3 +1,5 @@
+package person1;
+
 public class OperationResult {
     private final boolean success;
     private final String reason;
