@@ -18,6 +18,7 @@ public abstract class Facility implements Location {
         stock = new EnumMap<>(ResourceType.class);
         EquipmentsList = new ArrayList<>();
     }
+    @Override
     public String getName() {
         return name;
     }
