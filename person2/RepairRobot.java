@@ -1,6 +1,6 @@
 package person2;
-import facilities.Equipment;
-import facilities.Location;
+import person3.facilities.Equipment;
+import person3.facilities.Location;
 import java.util.EnumSet;
 
 public class RepairRobot extends Robot {

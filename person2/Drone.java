@@ -1,5 +1,4 @@
 package person2;
-
 import java.util.EnumSet;
 
 public class Drone extends Robot {

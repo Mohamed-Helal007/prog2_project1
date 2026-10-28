@@ -1,7 +1,7 @@
 package person2;
-import emergencies.EmergencyType;
-import facilities.Location;
-import missions.Mission;
+import person3.Emergencies.EmergencyType;
+import person3.facilities.Location;
+import person4.Mission;
 import java.util.Set;
 
 public interface Agent {
