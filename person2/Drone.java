@@ -1,4 +1,6 @@
 package person2;
+import person1.*;
+import person3.facilities.Location;
 import java.util.EnumSet;
 
 public class Drone extends Robot {

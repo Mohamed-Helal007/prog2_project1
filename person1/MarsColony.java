@@ -1,4 +1,7 @@
 package person1;
+import person3.emergencies.*;
+import person3.facilities.*;
+import person2.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

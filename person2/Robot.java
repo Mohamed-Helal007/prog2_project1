@@ -1,7 +1,7 @@
 package person2;
 import person1.MarsColony;
 import person1.Tickable;
-import person3.Emergencies.EmergencyType;
+import person3.emergencies.EmergencyType;
 import person3.facilities.Location;
 import person4.Mission;
 import java.util.Collections;

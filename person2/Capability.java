@@ -1,5 +1,5 @@
 package person2;
-import person3.Emergencies.EmergencyType;
+import person3.emergencies.EmergencyType;
 
 public enum Capability {
     SURFACE_TRAVEL,

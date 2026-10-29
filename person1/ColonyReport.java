@@ -1,4 +1,7 @@
 package person1;
+import person2.*;
+import person3.facilities.*;
+import person3.emergencies.*;
 
 public class ColonyReport{
 
