@@ -1,0 +1,246 @@
+MARS-OPS Colony Simulator - Person 1 (Core, Simulation, Environment, Main)
+
+This README documents Person 1's part of the MARS-OPS project (Programming II, Lab 5).
+Sections that belong to other team members are marked TODO (Person X) so the final README
+can be completed by merging everyone's parts.
+
+------------------------------------------------------------------------------------------
+
+1. System description and main components
+
+MARS-OPS simulates a small colony on Mars. A colony has crew members, robots and
+facilities. Time moves forward in steps (called ticks), and in every step the objects in
+the colony update themselves. Missions can be submitted, emergencies can be triggered, and
+a text report can be printed at any moment.
+
+Person 1 components
+
+  -----------------------------------------------------------------------------------------
+  Class                                        Role
+  -------------------------------------------- --------------------------------------------
+  MarsColony                                   The core class. Holds the crew, robots,
+                                               facilities, environment, resource pool,
+                                               mission manager and emergency log. Validates
+                                               input and delegates work to the other
+                                               classes.
+
+  Simulation                                   The clock. Advances time one unit at a time
+                                               and sends a tick to the mission manager, the
+                                               crew and the robots.
+
+  ColonyReport                                 Builds the text report of the whole colony.
+                                               It only reads the colony.
+
+  OperationResult                              The answer to an operation that can fail:
+                                               success, or failure with a reason.
+
+  Tickable                                     Interface with onTick(MarsColony).
+                                               Implemented by CrewMember, Robot and
+                                               MissionManager.
+
+  Environment                                  Stores the current environmental condition
+                                               and answers yes/no questions about it.
+
+  EnvironmentCondition                         Enum: NORMAL, DUST_STORM, COMM_DISRUPT.
+
+  Main                                         Builds the colony and runs the demonstration
+                                               scenarios (see section 9).
+  -----------------------------------------------------------------------------------------
+
+Components written by other team members (used, not written, by Person 1)
+
+Agent, CrewMember, Robot, Facility, ResourcePool, ResourceType, MissionManager, Mission,
+Emergency and its subclasses.
+
+UML class diagram (Person 1 part)
+
+(See the file UML_Person1.png - the UML class diagram.)
+
+Blue boxes are Person 1 classes. Grey boxes are teammates' classes, shown only by name.
+
+------------------------------------------------------------------------------------------
+
+2. Design decisions and assumptions (Person 1)
+
+Aggregation, not composition, for the colony's parts. MarsColony receives Environment,
+ResourcePool and MissionManager through its constructor. It does not create them, and they
+could exist without the colony, so the relationship is aggregation (hollow diamond). Crew,
+robots and facilities are also aggregation: the lists and the objects inside them are
+created outside and passed in. The same applies to the Emergency objects kept in the log:
+the colony creates the empty log list, but each emergency is created outside and handed to
+triggerEmergency.
+
+The lists are shared, not copied. The constructor stores the same list objects it receives
+(this.crew = crew). This is needed so that ResourcePool and MarsColony see the same
+facilities list: a facility added later through addfacility must also be visible to the
+resource pool. Because of this, the lists passed in must be mutable (new ArrayList<>(),
+not List.of(...) or Arrays.asList(...)).
+
+Read-only getters, controlled changes. getCrew(), getRobots(), getFacilities() and
+getEmergencyLog() return unmodifiable views. Outside code can read and loop over them but
+cannot add or remove directly. All additions go through addcrew, addrobot and addfacility,
+which reject null.
+
+Two ways of reporting problems. - A programmer mistake (for example passing null where an
+object is required) throws IllegalArgumentException. - An expected failure (for example a
+mission that is rejected) returns an OperationResult with isSuccess() == false and a
+readable reason.
+
+Delegation. MarsColony does not contain mission, resource or emergency rules. getTotal
+asks ResourcePool, submitMission asks MissionManager, triggerEmergency asks the Emergency
+to handle itself, and generateReport asks ColonyReport.
+
+OperationResult has a private constructor. Results can only be created with
+OperationResult.ok() or OperationResult.fail(reason). A failure with a missing or blank
+reason gets a default message, so a failure always has a reason.
+
+Environment is not Tickable. The environment does not change by itself over time. It
+changes only when Main calls setCondition(...).
+
+Assumptions
+
+-   Teammates' classes follow the shared contracts: Agent has getName(), isAvailable(),
+    isOperational(), getLocation(); CrewMember and Robot implement Agent and Tickable;
+    MissionManager implements Tickable and has submit, getActiveMission, getHistory; etc.
+-   All classes are in the same package (person1) or are imported correctly (see section
+    8).
+-   ResourcePool keeps the same facilities list object it receives.
+
+------------------------------------------------------------------------------------------
+
+3. Resource allocation rules
+
+Person 1's part: MarsColony.getTotal(ResourceType) forwards the question to ResourcePool,
+and ColonyReport prints the total of every ResourceType in the "RESOURCE TOTALS" section.
+MarsColony itself does not allocate, reserve or consume resources.
+
+TODO (Person 3): document the allocation rules here (how resources are reserved, consumed
+and released; what happens when there is not enough; how facilities affect totals).
+
+------------------------------------------------------------------------------------------
+
+4. Emergency rules
+
+Person 1's part: MarsColony.triggerEmergency(Emergency): 1. rejects null with an
+IllegalArgumentException; 2. adds the emergency to emergencyLog first, so it stays on
+record; 3. calls emergency.handle(this), passing the colony so the emergency can act on
+it.
+
+ColonyReport prints every emergency in the log under "EMERGENCY OUTCOMES": its type, its
+state, and its reason when one exists.
+
+TODO (Person who wrote Emergency and its subclasses): document each emergency type, what
+triggers it, what it changes in the colony, and its possible states and outcomes.
+
+------------------------------------------------------------------------------------------
+
+5. Environmental effects
+
+Person 1 defines the environment (class Environment, enum EnvironmentCondition).
+
+  ------------------------------------------------------------------------------------------------------------
+  Condition         isDustStorm()     isCommsDisrupted()   allowsSurfaceOperations()   allowsRemoteControl()
+  ----------------- ----------------- -------------------- --------------------------- -----------------------
+  NORMAL            false             false                true                        true
+
+  DUST_STORM        true              false                false                       true
+
+  COMM_DISRUPT      false             true                 true                        false
+  ------------------------------------------------------------------------------------------------------------
+
+-   The condition starts as NORMAL.
+-   setCondition(null) is ignored and the old condition stays.
+-   Only one condition is active at a time.
+-   The condition changes only when Main calls setCondition(...). It does not change over
+    time.
+-   Other classes must ask allowsSurfaceOperations() and allowsRemoteControl() instead of
+    comparing enum values themselves.
+
+TODO (Persons 2 and 4): document exactly what each effect does to robots, crew and
+missions (for example which missions are blocked or fail during a dust storm).
+
+------------------------------------------------------------------------------------------
+
+6. Mission states
+
+Person 1's part: MarsColony.submitMission(mission, agents) rejects a null mission or a
+null agent list with a failed OperationResult. Otherwise it passes the request to
+MissionManager.submit(...) and returns its answer unchanged.
+
+ColonyReport shows the active mission (name, state, progress as elapsed/duration, and the
+failure reason if there is one) and the mission history (name, state, and the reason if
+any).
+
+TODO (Person 2 / Person 4): list every mission state, what moves a mission from one state
+to the next, and when a mission fails.
+
+------------------------------------------------------------------------------------------
+
+7. Other implementation decisions left open by the specification
+
+-   Tick order. In each time unit Simulation does: (1) time + 1, (2) update the colony's
+    time, (3) tick MissionManager, (4) tick every crew member, (5) tick every robot. The
+    mission manager goes first so it sees the agents as they were before they update in
+    the same unit. Facilities and the environment are not ticked.
+-   Who owns the time. The colony stores the simulation time. Simulation reads it from the
+    colony, adds 1 and writes it back, so the report always shows the current time.
+-   Negative values. advanceTime(units) with a negative number and setSimulationTime(t)
+    with a negative number throw IllegalArgumentException. advanceTime(0) does nothing.
+-   Report format. Sections in this order: time, environment, resource totals, crew,
+    robots, facilities, active mission, mission history, emergency outcomes. An unknown
+    location is printed as Unknown. An empty section prints "No active mission.", "No
+    missions recorded." or "No emergencies recorded." A failure reason is printed only
+    when it exists and is not empty.
+-   getAvailableAgents(). An agent is available only if it is both isAvailable() and
+    isOperational().
+-   Method names. The add methods are addcrew, addrobot, addfacility (lowercase). Make
+    sure every class that calls them uses the same spelling.
+-   Known limitations. The add methods do not reject duplicates (the same object could be
+    added twice and then ticked twice). ColonyReport builds text with String +=, which is
+    simple but less efficient than StringBuilder.
+
+------------------------------------------------------------------------------------------
+
+8. Compiling and running
+
+Requirements: JDK 17 or newer.
+
+From the root of the repository, compile every source file together into an out folder:
+
+    javac -d out person1/*.java person2/*.java person3/*.java person4/*.java
+
+Run the program:
+
+    java -cp out person1.Main
+
+Notes: - This works when all classes declare the same package (package person1;) or import
+each other correctly. If the team uses different packages, MarsColony needs import lines
+for the teammates' classes. - Main.java is in the person1 folder. If it is in a different
+folder or package, change the run command to match (for example java -cp out Main).
+
+TODO (team): confirm the final folder and package layout before submission and update
+these commands if needed.
+
+------------------------------------------------------------------------------------------
+
+9. Running the demonstration scenarios
+
+Main builds the colony and runs the scenarios in order, printing the report before and
+after the important steps. The general flow of every scenario is:
+
+1.  Create mutable lists: new ArrayList<>() for crew, robots and facilities.
+2.  Create Environment, ResourcePool (passing the same facilities list) and MissionManager
+    using the constructors agreed by the team.
+3.  Create the MarsColony and add crew, robots and facilities with addcrew, addrobot,
+    addfacility.
+4.  Print the starting state: System.out.println(colony.generateReport());
+5.  Create Simulation sim = new Simulation(colony);
+6.  Apply the scenario: change the environment with
+    colony.getEnvironment().setCondition(...), submit missions with
+    colony.submitMission(...), trigger emergencies with colony.triggerEmergency(...).
+7.  Advance time with sim.advanceTime(n).
+8.  Print the report again to show the result.
+
+TODO (team): list here each required demonstration scenario from the assignment by name,
+what it shows, and what output to expect. Run the program once and paste the expected key
+lines of output for each scenario.
